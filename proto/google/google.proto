@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+service Google {
+	rpc NearBySearch(NearBySearchRequest) returns (NearBySearchResponse) {}
+	rpc TextSearch(TextSearchRequest) returns (TextSearchResponse) {}
+	rpc RadarSearch(RadarSearchRequest) returns (RadarSearchResponse) {}
+}
+
+
+message Point {
+        double lat = 1;
+        double lng = 2;
+}
+
+message Price {
+	uint64 min_price = 1;
+	uint64 max_price = 2;
+}
+
+message Geometry {
+	Point location = 1;
+}
+
+message OpeningHours {
+	bool open_now = 1;
+}
+
+message Photo {
+	uint64 height = 1;
+	repeated string html_attributions = 2;
+	string photo_reference = 3;
+	uint64 width = 4;
+}
+
+message AltId {
+	string place_id = 1;
+	string scope = 2;
+}
+
+message NearBySearchRequest {
+	Point location = 1;
+	uint64 radius = 2;
+	string rank_by = 3;
+	string keyword = 4;
+	string language = 5;
+	Price price = 6;
+	string name = 7;
+	bool open_now = 8;
+	repeated string types = 9;
+	string page_token = 10;
+	bool zagat_selected = 11;
+}
+
+message NearBySearchResponse {
+	message NearBySearchResult {
+		Geometry geometry = 1;
+		string icon = 2;
+		string id = 3;
+		string name = 4;
+		OpeningHours opening_hours = 5;
+		repeated Photo photos = 6;
+		string place_id = 7;
+		repeated AltId alt_ids = 8;
+		string reference = 9;
+		repeated string types = 10;
+		string vicinity = 11;
+	}
+	repeated string html_attributions = 1;
+	repeated NearBySearchResult results = 2;
+	string status = 3;
+}
+
+message TextSearchRequest {
+	Point location = 1;
+	uint64 radius = 2; // in meters
+	string query = 3;
+	string language = 4;
+	Price price = 5;
+	string name = 6;
+	bool open_now = 7;
+	repeated string types = 8;
+	bool zagat_selected = 9;
+	string page_token = 10;
+}
+
+message TextSearchResponse {
+	message TextSearchResult {
+		Geometry geometry = 1;
+		string icon = 2;
+		string id = 3;
+		string name = 4;
+		OpeningHours opening_hours = 5;
+		repeated Photo photos = 6;
+		string place_id = 7;
+		repeated AltId alt_ids = 8;
+		string reference = 9;
+		repeated string types = 10;
+		string formatted_address = 11;
+			
+	}
+
+	repeated string html_attributions = 1;
+	repeated TextSearchResult results = 2;
+	string status = 3;
+}
+
+message RadarSearchRequest {
+	Point location = 1;
+	uint64 radius = 2; // in meters
+	string keyword = 3;
+	Price price = 4;
+	string name = 5;
+	bool open_now = 6;
+	repeated string types = 7;
+	bool zagat_selected = 8;
+}
+
+message RadarSearchResponse {
+	message RadarSearchResult {
+		Geometry geometry = 1;
+		string place_id = 2;
+	}
+
+	repeated string html_attributions = 1;
+	repeated RadarSearchResult results = 2;
+	string status = 3;
+}
