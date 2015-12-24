@@ -1,6 +1,6 @@
 # Place Server
 
-Place server is a way of storing and retrieving places.
+Place server is a way of storing and retrieving places. It's backed by elasticsearch.
 
 The place server also implements the Google Maps Place search API.
 
@@ -22,16 +22,83 @@ The place server also implements the Google Maps Place search API.
 
 	```shell
 	go get github.com/micro/place-srv
-	place-srv --google_api_key=YOUR_API_TOKEN
+	place-srv --google_api_key=YOUR_API_TOKEN --elasticsearch_hosts=localhost:9200
 	```
 
 	OR as a docker container
 
 	```shell
-	docker run microhq/place-srv --google_api_key=YOUR_API_TOKEN --registry_address=YOUR_REGISTRY_ADDRESS
+	docker run microhq/place-srv --google_api_key=YOUR_API_TOKEN --elasticsearch_hosts=ELASTICSEARCH_HOST_ADDRESS --registry_address=YOUR_REGISTRY_ADDRESS
 	```
 
-## The API
+## The Place API
+
+### Create Place
+```shell
+micro query go.micro.srv.place Location.Create '{"place": {"id": "38826c74-7790-4107-ad79-fe317f47760c", "name":"Sticks N Sushi", "iata": "LON", "address": "11 Henrietta St, London WC2E 8PY, United Kingdom", "tags": ["sushi"]}}'
+{}
+```
+
+### Update Place
+```shell
+micro query go.micro.srv.place Location.Create '{"place": {"id": "38826c74-7790-4107-ad79-fe317f47760c", "name":"Sticks N Sushi", "iata": "LON", "address": "11 Henrietta St, London WC2E 8PY, United Kingdom", "description": "Japanese restaurant based on a renowned Danish concept, offering sushi and grilled yakitori skewers.", "phone": "+44 20 3141 8810", "location": {"lat": 51.5086542, "lng": -0.1060743}, "tags": ["sushi"]}}'
+```
+
+
+### Read Place
+```shell
+micro query go.micro.srv.place Location.Read '{"id": "38826c74-7790-4107-ad79-fe317f47760c"}'
+{
+	"place": {
+		"address": "11 Henrietta St, London WC2E 8PY, United Kingdom",
+		"description": "Japanese restaurant based on a renowned Danish concept, offering sushi and grilled yakitori skewers.",
+		"iata": "LON",
+		"id": "38826c74-7790-4107-ad79-fe317f47760c",
+		"location": {
+			"lat": 51.5086542,
+			"lng": -0.1060743
+		},
+		"name": "Sticks N Sushi",
+		"phone": "+44 20 3141 8810",
+		"tags": [
+			"sushi"
+		]
+	}
+}
+```
+
+### Delete Place
+```shell
+micro query go.micro.srv.place Location.Delete '{"id": "38826c74-7790-4107-ad79-fe317f47760c"}'
+{}
+```
+
+### Search Places
+```shell
+micro query go.micro.srv.place Location.Search '{"query": "tags: sushi AND iata: LON"}'
+{
+	"places": [
+		{
+			"address": "11 Henrietta St, London WC2E 8PY, United Kingdom",
+			"description": "Japanese restaurant based on a renowned Danish concept, offering sushi and grilled yakitori skewers.",
+			"iata": "LON",
+			"id": "38826c74-7790-4107-ad79-fe317f47760c",
+			"location": {
+				"lat": 51.5086542,
+				"lng": -0.1060743
+			},
+			"name": "Sticks N Sushi",
+			"phone": "+44 20 3141 8810",
+			"tags": [
+				"sushi"
+			]
+		}
+	]
+}
+```
+
+## Google Place Search API
+
 Place server implements the [Google Place Search API](https://developers.google.com/places/web-service/search) as RPC.
 
 ### NearBySearch

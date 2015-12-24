@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "github.com/micro/place-srv/proto/common.proto";
+
+service Location {
+	rpc Create(CreateRequest) returns (CreateResponse) {}
+	rpc Read(ReadRequest) returns (ReadResponse) {}
+	rpc Update(UpdateRequest) returns (UpdateResponse) {}
+	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+	rpc Search(SearchRequest) returns (SearchResponse) {}
+}
+
+message Place {
+	string id = 1;
+	string name = 2;
+	Point location = 3;
+	string iata = 4; // international city code
+	string address = 5;
+	string phone = 6;
+	string description = 7;
+	repeated string tags = 8;
+}
+
+message CreateRequest {
+	Place place = 1;
+}
+
+message CreateResponse {
+}
+
+message ReadRequest {
+	string id = 1;
+}
+
+message ReadResponse {
+	Place place = 1;
+}
+
+message UpdateRequest {
+	Place place = 1;
+}
+
+message UpdateResponse {
+}
+
+message DeleteRequest {
+	string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message SearchRequest {
+	string query = 1; // full text search
+	uint64 limit = 4;
+	uint64 offset = 5;
+}
+
+message SearchResponse {
+	repeated Place places = 1;
+}
