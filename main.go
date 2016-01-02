@@ -3,10 +3,9 @@ package main
 import (
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/micro/cli"
 	log "github.com/golang/glog"
-	"github.com/micro/go-micro/cmd"
-	"github.com/micro/go-micro/server"
+	micro "github.com/micro/go-micro"
 
 	"github.com/micro/place-srv/elastic"
 	"github.com/micro/place-srv/google"
@@ -16,38 +15,35 @@ import (
 )
 
 func main() {
-	cmd.Flags = append(cmd.Flags,
-		cli.StringFlag{
-			Name:   "google_api_key",
-			EnvVar: "GOOGLE_API_KEY",
-			Usage:  "Google maps API key",
-		},
-		cli.StringFlag{
-			Name:   "elasticsearch_hosts",
-			EnvVar: "ELASTICSEARCH_HOSTS",
-			Usage:  "Comma separated list of elasticsearch hosts",
-			Value:  "localhost:9200",
-		},
+	service := micro.NewService(
+		micro.Name("go.micro.srv.place"),
+		micro.Flags(
+			cli.StringFlag{
+				Name:   "google_api_key",
+				EnvVar: "GOOGLE_API_KEY",
+				Usage:  "Google maps API key",
+			},
+			cli.StringFlag{
+				Name:   "elasticsearch_hosts",
+				EnvVar: "ELASTICSEARCH_HOSTS",
+				Usage:  "Comma separated list of elasticsearch hosts",
+				Value:  "localhost:9200",
+			},
+		),
+		micro.Action(func(c *cli.Context) {
+			google.Key = c.String("google_api_key")
+			parts := strings.Split(c.String("elasticsearch_hosts"), ",")
+			elastic.Hosts = parts
+		}),
 	)
 
-	cmd.Actions = append(cmd.Actions, func(c *cli.Context) {
-		google.Key = c.String("google_api_key")
-		parts := strings.Split(c.String("elasticsearch_hosts"), ",")
-		elastic.Hosts = parts
-	})
-
-	cmd.Init()
-
-	server.Init(
-		server.Name("go.micro.srv.place"),
-	)
-
-	proto.RegisterGoogleHandler(server.DefaultServer, &handler.Google{})
-	proto2.RegisterLocationHandler(server.DefaultServer, &handler.Location{})
-
+	service.Init()
 	elastic.Init()
 
-	if err := server.Run(); err != nil {
+	proto.RegisterGoogleHandler(service.Server(), &handler.Google{})
+	proto2.RegisterLocationHandler(service.Server(), &handler.Location{})
+
+	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
