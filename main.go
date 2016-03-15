@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/micro/cli"
-	log "github.com/golang/glog"
+	"log"
 	micro "github.com/micro/go-micro"
 
 	"github.com/micro/place-srv/elastic"
