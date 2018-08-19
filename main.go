@@ -4,14 +4,14 @@ import (
 	"strings"
 
 	"github.com/micro/cli"
-	"log"
 	micro "github.com/micro/go-micro"
+	"log"
 
-	"github.com/micro/place-srv/elastic"
-	"github.com/micro/place-srv/google"
-	"github.com/micro/place-srv/handler"
-	proto "github.com/micro/place-srv/proto/google"
-	proto2 "github.com/micro/place-srv/proto/location"
+	"github.com/microhq/place-srv/elastic"
+	"github.com/microhq/place-srv/google"
+	"github.com/microhq/place-srv/handler"
+	proto "github.com/microhq/place-srv/proto/google"
+	proto2 "github.com/microhq/place-srv/proto/location"
 )
 
 func main() {

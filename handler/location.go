@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/micro/go-micro/errors"
-	"github.com/micro/place-srv/elastic"
-	proto "github.com/micro/place-srv/proto/location"
+	"github.com/microhq/place-srv/elastic"
+	proto "github.com/microhq/place-srv/proto/location"
 
 	"golang.org/x/net/context"
 )

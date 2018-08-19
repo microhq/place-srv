@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	lib "github.com/mattbaird/elastigo/lib"
-	proto "github.com/micro/place-srv/proto/location"
+	proto "github.com/microhq/place-srv/proto/location"
 )
 
 var (

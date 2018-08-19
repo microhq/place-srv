@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/micro/go-micro/errors"
-	"github.com/micro/place-srv/google"
-	proto "github.com/micro/place-srv/proto/google"
+	"github.com/microhq/place-srv/google"
+	proto "github.com/microhq/place-srv/proto/google"
 
 	"golang.org/x/net/context"
 )

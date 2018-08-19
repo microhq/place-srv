@@ -21,7 +21,7 @@ The place server also implements the Google Maps Place search API.
 4. Download and start the service
 
 	```shell
-	go get github.com/micro/place-srv
+	go get github.com/microhq/place-srv
 	place-srv --google_api_key=YOUR_API_TOKEN --elasticsearch_hosts=localhost:9200
 	```
 
